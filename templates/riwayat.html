@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Riwayat Diagnosa - NeuroSkin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f4f6f9;
+        overflow: hidden; /* Tetap hidden supaya scroll global tidak muncul */
+      }
+
+      .container {
+        display: flex;
+        height: 100vh; /* Full tinggi layar */
+        overflow: hidden; /* Hindari scroll global */
+      }
+
+      .sidebar {
+        width: 240px;
+        background-color: #2f3542;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+        flex-shrink: 0;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .sidebar h2 {
+        font-size: 22px;
+        margin-bottom: 40px;
+        text-align: center;
+      }
+
+      .sidebar a {
+        color: white;
+        text-decoration: none;
+        margin: 12px 0;
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        padding: 10px;
+        border-radius: 6px;
+        transition: background-color 0.2s;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background-color: #57606f;
+      }
+
+      .sidebar a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+      }
+
+      .main {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 30px;
+        overflow-y: auto; /* Scroll hanya di bagian ini */
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: nowrap;
+        gap: 10px;
+      }
+
+      .topbar-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex: 1;
+        min-width: 0;
+      }
+
+      .topbar-left h3 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2f3542;
+        margin: 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        background-color: #ffffff;
+        padding: 8px 15px;
+        border-radius: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        font-weight: 500;
+        font-size: 16px;
+        white-space: nowrap;
+      }
+
+      .user-info i {
+        margin-right: 8px;
+        color: #2f3542;
+      }
+
+      .card {
+        background-color: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        overflow-x: auto;
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      table {
+        width: 100%;
+        min-width: 700px;
+        border-collapse: collapse;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        min-width: 600px;
+      }
+
+      table thead {
+        background-color: #2f3542;
+        color: white;
+      }
+
+      th,
+      td {
+        padding: 12px 15px;
+        text-align: center;
+        border-bottom: 1px solid #ddd;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
+
+      tbody tr:hover {
+        background-color: #f1f1f1;
+      }
+
+      .back-btn {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 16px;
+        background-color: #1e90ff;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+      }
+
+      .back-btn:hover {
+        background-color: #0d6efd;
+      }
+
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 22px;
+        color: #2f3542;
+        cursor: pointer;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+        }
+
+        .sidebar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100%;
+          z-index: 1000;
+          transform: translateX(-100%);
+        }
+
+        .sidebar.active {
+          transform: translateX(0);
+        }
+
+        .menu-toggle {
+          display: block;
+        }
+
+        .main {
+          padding: 20px;
+        }
+
+        .topbar-left h3 {
+          font-size: 18px;
+        }
+
+        .user-info {
+          font-size: 14px;
+          padding: 6px 12px;
+        }
+
+        table {
+          min-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Sidebar -->
+      <div class="sidebar" id="sidebar">
+        <h2><i class="fas fa-heartbeat"></i> NeuroSkin</h2>
+        <a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+        <a href="/upload"><i class="fas fa-upload"></i> Upload Gambar</a>
+        <a href="/hasil"
+          ><i class="fas fa-file-medical-alt"></i> Hasil Diagnosa</a
+        >
+        <a href="/riwayat" class="active"
+          ><i class="fas fa-history"></i> Riwayat</a
+        >
+        <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+      </div>
+
+      <!-- Main Content -->
+      <div class="main">
+        <div class="topbar">
+          <div class="topbar-left">
+            <button class="menu-toggle" onclick="toggleSidebar()">
+              <i class="fas fa-bars"></i>
+            </button>
+            <h3>Riwayat Diagnosa Anda</h3>
+          </div>
+          <div class="user-info">
+            <i class="fas fa-user-circle"></i> {{ session['user_name'] }}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Tanggal</th>
+                  <th>Penyakit</th>
+                  <th>Akurasi</th>
+                  <th>Detail</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for row in data %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ row.tanggal_diagnosa.strftime('%d-%m-%Y') }}</td>
+                  <td>{{ row.nama_penyakit }}</td>
+                  <td>{{ row.akurasi }}%</td>
+                  <td><a href="/detail/{{ row.id_diagnosa }}">Lihat</a></td>
+                </tr>
+                {% else %}
+                <tr>
+                  <td colspan="5">Belum ada riwayat diagnosa.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <a href="/dashboard" class="back-btn">← Kembali ke Dashboard</a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("active");
+      }
+    </script>
+  </body>
+</html>

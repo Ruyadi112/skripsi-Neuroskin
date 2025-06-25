@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Detail Diagnosa</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        padding: 20px;
+        overflow-x: hidden;
+      }
+
+      .container {
+        max-width: 600px;
+        background: #fff;
+        margin: auto;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        color: #333;
+        margin-top: 0;
+      }
+
+      p {
+        margin: 10px 0;
+      }
+
+      #konten-download {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        text-align: center;
+        padding: 20px;
+      }
+
+      #konten-download p,
+      #konten-download h2 {
+        width: 100%;
+        max-width: 500px;
+        text-align: left;
+      }
+
+      #konten-download img {
+        width: 100%;
+        max-width: 500px;
+        height: auto;
+        object-fit: contain;
+        border-radius: 8px;
+        margin-top: 12px;
+      }
+
+      img {
+        margin-top: 10px;
+        width: 100%;
+        max-width: 350px;
+        border-radius: 8px;
+      }
+
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .controls select,
+      .controls button,
+      .btn-kembali {
+        padding: 8px 14px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      .controls button {
+        background-color: #fff;
+        cursor: pointer;
+      }
+
+      .btn-kembali {
+        background-color: #1e90ff;
+        color: white;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+
+      .btn-kembali:hover {
+        background-color: #0c75d1;
+      }
+
+      @media (max-width: 768px) {
+        .controls {
+          flex-direction: column;
+          align-items: stretch;
+        }
+
+        .controls select,
+        .controls button,
+        .btn-kembali {
+          width: 100%;
+          font-size: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div id="konten-download">
+        <h2>Detail Diagnosa</h2>
+        <p>
+          <strong>Tanggal:</strong> {{
+          detail.tanggal_diagnosa.strftime('%d-%m-%Y %H:%M:%S') }}
+        </p>
+        <p><strong>Penyakit:</strong> {{ detail.nama_penyakit }}</p>
+        <p><strong>Akurasi:</strong> {{ detail.akurasi }}%</p>
+        <p><strong>Gambar:</strong></p>
+        <img
+          id="gambarDiagnosa"
+          src="{{ url_for('static', filename='uploads/' + detail.nama_file) }}"
+          alt="Gambar Diagnosa"
+        />
+      </div>
+
+      <div class="controls">
+        <select id="formatDownload">
+          <option value="jpg">JPG</option>
+          <option value="png">PNG</option>
+          <option value="pdf">PDF</option>
+        </select>
+        <button onclick="downloadDiagnosa()">Download</button>
+        <a href="/riwayat" class="btn-kembali">← Kembali ke Riwayat</a>
+      </div>
+    </div>
+
+    <script>
+      async function downloadDiagnosa() {
+        const format = document.getElementById("formatDownload").value;
+        const content = document.getElementById("konten-download");
+
+        html2canvas(content).then((canvas) => {
+          if (format === "pdf") {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            const imgData = canvas.toDataURL("image/png");
+            const width = pdf.internal.pageSize.getWidth();
+            const height = (canvas.height * width) / canvas.width;
+            pdf.addImage(imgData, "PNG", 0, 10, width, height);
+            pdf.save("detail_diagnosa.pdf");
+          } else {
+            const mime = format === "png" ? "image/png" : "image/jpeg";
+            const link = document.createElement("a");
+            link.download = "detail_diagnosa." + format;
+            link.href = canvas.toDataURL(mime);
+            link.click();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

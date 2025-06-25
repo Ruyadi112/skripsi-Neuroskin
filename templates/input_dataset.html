@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Input Dataset - NeuroSkin</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #f3f4f6;
+        display: flex;
+      }
+      .sidebar {
+        width: 240px;
+        background-color: #2f3542;
+        color: white;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+
+      .sidebar h2 {
+        font-size: 22px;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .sidebar a {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 6px;
+        color: white;
+        text-decoration: none;
+        transition: background 0.2s ease-in-out;
+      }
+
+      .sidebar a i {
+        margin-right: 12px;
+        width: 20px;
+        text-align: center;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background-color: #57606f;
+      }
+
+      .main {
+        flex: 1;
+        padding: 30px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: flex-end; /* Ganti dari space-between */
+        align-items: center;
+        margin-bottom: 30px;
+      }
+
+      .topbar .user-info {
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card {
+        background: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 500px;
+        margin: 0 auto;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .card h3 {
+        margin-bottom: 25px;
+        text-align: center;
+      }
+
+      label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      .buttons {
+        margin-top: 25px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .buttons button,
+      .buttons a {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .buttons button {
+        background-color: #007bff;
+        color: white;
+      }
+
+      .buttons .cancel {
+        background-color: #e74c3c;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2><i class="fas fa-heartbeat"></i>NeuroSkin</h2>
+      <a href="/admin_dashboard"><i class="fas fa-home"></i> Dashboard</a>
+      <a href="/user_management"
+        ><i class="fas fa-users-cog"></i> Manajemen Pengguna</a
+      >
+      <a href="/input_dataset"><i class="fas fa-database"></i> Input Dataset</a>
+      <a href="/edit_profil_admin"
+        ><i class="fas fa-user-edit"></i> Edit Profil</a
+      >
+      <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Main -->
+    <div class="main">
+      <div class="topbar">
+        <div class="user-info">
+          <strong>{{ session['user_name'] }}</strong>
+          <i class="fas fa-user-circle"></i>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Tambah Data Latih</h3>
+        <form
+          method="POST"
+          enctype="multipart/form-data"
+          action="/input_dataset"
+        >
+          <label>Pilih File Gambar</label>
+          <input type="file" name="image" required />
+
+          <label>Label Penyakit</label>
+          <select name="label" required>
+            <option value="">-- Pilih Label --</option>
+            <option value="akiec">akiec</option>
+            <option value="bkl">bkl</option>
+            <option value="bcc">bcc</option>
+            <option value="df">df</option>
+            <option value="nv">nv</option>
+            <option value="mel">mel</option>
+            <option value="vasc">vasc</option>
+          </select>
+
+          <label>Sumber Data</label>
+          <select name="source" required>
+            <option value="HAM10000">HAM10000</option>
+            <option value="Kaggle">Kaggle</option>
+            <option value="Kaggle">User</option>
+          </select>
+
+          <div class="buttons">
+            <button type="submit">Tambah ke Dataset</button>
+            <a href="/admin_dashboard" class="cancel">Batal</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

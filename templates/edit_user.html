@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <title>Edit User - NeuroSkin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f6f9;
+      display: flex;
+    }
+
+    .sidebar {
+      background-color: #1e2a38;
+      color: white;
+      width: 240px;
+      height: 100vh;
+      padding: 30px 20px;
+    }
+
+    .sidebar h2 {
+      font-size: 24px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .sidebar a {
+      display: flex;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      margin: 15px 0;
+      font-size: 16px;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .sidebar a:hover,
+    .sidebar a.active {
+      background-color: #3b4c5a;
+    }
+
+    .sidebar a i {
+      margin-right: 10px;
+    }
+
+    .main {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h3 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 5px;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .btn.update {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn.update:hover {
+      background-color: #0056b3;
+    }
+
+    .btn.cancel {
+      background-color: #6c757d;
+      color: white;
+      margin-left: 10px;
+    }
+
+    .btn.cancel:hover {
+      background-color: #5a6268;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 18px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      display: block;
+    }
+
+    .actions {
+      text-align: center;
+    }
+
+    .actions button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .actions a {
+      color: #dc3545;
+      text-decoration: none;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2><i class="fas fa-heartbeat"></i>NeuroSkin</h2>
+    <a href="/admin_dashboard"><i class="fas fa-home"></i> Dashboard</a>
+    <a href="/user_management" class="active"><i class="fas fa-users-cog"></i> Manajemen Pengguna</a>
+    <a href="/input_dataset"><i class="fas fa-database"></i> Input Dataset</a>
+    <a href="/edit_profil_admin"><i class="fas fa-user-edit"></i> Edit Profil</a>
+    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </div>
+
+  <div class="main">
+    <div class="card">
+      <h3><i class="fas fa-user-edit"></i> Edit User</h3>
+      <form method="POST">
+        {% if success %}
+        <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+          ✅ Data berhasil diperbarui!
+        </div>
+        {% endif %}
+
+        <input type="text" name="nama" value="{{ user.nama }}" placeholder="Nama" required />
+        <input type="email" name="email" value="{{ user.email }}" placeholder="Email" required />
+
+        <select name="role" required>
+          <option value="" disabled hidden>Pilih Role</option>
+          <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+          <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+        </select>
+
+        <div class="actions">
+          <button type="submit" class="btn update">Perbarui</button>
+          <a href="/user_management" class="btn cancel">Batal</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

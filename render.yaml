@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: neuroskin-app
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DB_HOST
+        value: sql12.freesqldatabase.com
+      - key: DB_USER
+        value: sql12786702
+      - key: DB_PASS
+        value: 1VmzvnIlgu
+      - key: DB_NAME
+        value: sql12786702
+      - key: SECRET_KEY
+        value: skripsi_neouroskin
